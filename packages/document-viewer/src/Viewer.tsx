@@ -1,15 +1,6 @@
 import React from "react";
 
 import { AppBar, Box } from "@mui/material";
-import { Theme } from "@mui/material/styles";
-import StylesProvider from "@mui/styles/StylesProvider";
-import createGenerateClassName from "@mui/styles/createGenerateClassName";
-import makeStyles from "@mui/styles/makeStyles";
-import { GenerateId } from "jss";
-
-declare module "@mui/styles/defaultTheme" {
-  interface DefaultTheme extends Theme {}
-}
 
 import NavBar from "./NavBar";
 import Pages, { PagesHandle } from "./Pages";
@@ -21,41 +12,6 @@ import { isEqual } from "lodash";
 
 export const DEFAULT_ZOOM = "75%";
 const DEFAULT_LAZY_LOADING_WINDOW = 2;
-
-const generateClassName = createGenerateClassName({
-  disableGlobal: true,
-  seed: "dv",
-});
-
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexFlow: "column nowrap",
-    overflow: "hidden",
-    height: "100%",
-    width: "100%",
-    background: "#F9FBFF",
-    padding: 0,
-    margin: 0,
-  },
-  appBar: {
-    zIndex: 1201,
-  },
-  container: {
-    display: "flex",
-    flexFlow: "row nowrap",
-    overflow: "hidden",
-    height: "100%",
-    width: "100%",
-    padding: 0,
-    margin: 0,
-  },
-  viewer: {
-    flex: "1 1 auto",
-    padding: 0,
-    margin: 0,
-  },
-});
 
 export type ViewerRef = React.RefObject<PagesHandle>;
 
@@ -71,7 +27,6 @@ type DocumentViewerProps = {
   topics?: Topic[];
   lazyLoadingWindow?: number;
   loading?: boolean;
-  muiClassGenerator?: GenerateId;
   name: string;
   onAnnotationCreate?: (annotation: Annotation) => void;
   onAnnotationDelete?: (annotation: Annotation) => void;
@@ -101,10 +56,7 @@ const DocumentViewer = (props: DocumentViewerProps, ref: React.Ref<JSX.Element>)
     searchResults = [],
     Summary,
     summaryProps,
-    muiClassGenerator = generateClassName,
   } = props;
-
-  const classes = useStyles(props);
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [focusingAnnotation, setFocusingAnnotation] = React.useState<boolean>(false);
@@ -243,54 +195,76 @@ const DocumentViewer = (props: DocumentViewerProps, ref: React.Ref<JSX.Element>)
     : undefined;
 
   return (
-    <StylesProvider generateClassName={muiClassGenerator}>
-      <Box ref={ref} className={classes.root} tabIndex={-1}>
-        <AppBar className={classes.appBar} position="relative" elevation={1}>
-          <NavBar
-            documentName={name}
-            navigationIndex={currentPage}
-            navigationTotal={pages.length}
-            onNavigationIndexChange={handleNavigationIndexChange}
-            onClose={onClose}
-            onNextDocument={onNextDocument}
-            onPreviousDocument={onPreviousDocument}
+    <Box
+      ref={ref}
+      tabIndex={-1}
+      sx={{
+        display: "flex",
+        flexFlow: "column nowrap",
+        overflow: "hidden",
+        height: "100%",
+        width: "100%",
+        background: "#F9FBFF",
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      <AppBar position="relative" elevation={1} sx={{ zIndex: 1201 }}>
+        <NavBar
+          documentName={name}
+          navigationIndex={currentPage}
+          navigationTotal={pages.length}
+          onNavigationIndexChange={handleNavigationIndexChange}
+          onClose={onClose}
+          onNextDocument={onNextDocument}
+          onPreviousDocument={onPreviousDocument}
+        />
+      </AppBar>
+      <Box
+        ref={containerEl}
+        sx={{
+          display: "flex",
+          flexFlow: "row nowrap",
+          overflow: "hidden",
+          height: "100%",
+          width: "100%",
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        {Summary && (
+          <Summary
+            ref={summaryEl}
+            {...summaryProps}
+            zoom={zoom}
+            onZoomChange={handleZoomChange}
+            viewerRef={pagesEl}
           />
-        </AppBar>
-        <Box ref={containerEl} className={classes.container}>
-          {Summary && (
-            <Summary
-              ref={summaryEl}
-              {...summaryProps}
-              zoom={zoom}
-              onZoomChange={handleZoomChange}
-              viewerRef={pagesEl}
-            />
-          )}
-          <Box className={classes.viewer}>
-            <Pages
-              ref={pagesEl}
-              annotations={indexAnnotations(annotations)}
-              currentPage={currentPage}
-              focusedAnnotationIndex={focusedAnnotationIndex}
-              focusingAnnotation={focusingAnnotation}
-              lazyLoadingWindow={lazyLoadingWindow}
-              loading={loading}
-              onAnnotationCreate={onAnnotationCreate}
-              onAnnotationDelete={handleAnnotationDelete}
-              onFocusedAnnotationIndexChange={handleFocusedAnnotationChange}
-              onFocusingAnnotationChange={handleFocusingAnnotationChange}
-              onPageChange={handlePageChange}
-              pages={pages}
-              pagesHeight={pagesHeight}
-              pagesWidth={pagesWidth}
-              topics={topics}
-              searchResults={searchResults}
-              zoom={zoom}
-            />
-          </Box>
+        )}
+        <Box sx={{ flex: "1 1 auto", padding: 0, margin: 0 }}>
+          <Pages
+            ref={pagesEl}
+            annotations={indexAnnotations(annotations)}
+            currentPage={currentPage}
+            focusedAnnotationIndex={focusedAnnotationIndex}
+            focusingAnnotation={focusingAnnotation}
+            lazyLoadingWindow={lazyLoadingWindow}
+            loading={loading}
+            onAnnotationCreate={onAnnotationCreate}
+            onAnnotationDelete={handleAnnotationDelete}
+            onFocusedAnnotationIndexChange={handleFocusedAnnotationChange}
+            onFocusingAnnotationChange={handleFocusingAnnotationChange}
+            onPageChange={handlePageChange}
+            pages={pages}
+            pagesHeight={pagesHeight}
+            pagesWidth={pagesWidth}
+            topics={topics}
+            searchResults={searchResults}
+            zoom={zoom}
+          />
         </Box>
       </Box>
-    </StylesProvider>
+    </Box>
   );
 };
 

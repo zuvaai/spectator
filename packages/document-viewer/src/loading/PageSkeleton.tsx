@@ -1,16 +1,5 @@
 import React from "react";
-import { Box, Paper } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import Skeleton from '@mui/material/Skeleton';
-
-const useStyles = makeStyles(theme => ({
-  skeletonViewbox: {
-    padding: theme.spacing(4),
-    position: "relative",
-    flex: "1 1 auto",
-    cursor: "text",
-  },
-}));
+import { Box, Paper, Skeleton } from "@mui/material";
 
 type ParagraphProps = {
   lines: number;
@@ -29,26 +18,22 @@ const Paragraph = ({ lines, trail }: ParagraphProps) => {
 };
 const ParagraphDivider = () => <Box height="5%" />;
 
-const PageSkeleton = (): JSX.Element => {
-  const classes = useStyles();
+const PageSkeleton = (): JSX.Element => (
+  <Paper sx={{ padding: 4, position: "relative", flex: "1 1 auto", cursor: "text" }}>
+    <Skeleton height="4%" width="20%" />
+    <ParagraphDivider />
 
-  return (
-    <Paper className={classes.skeletonViewbox}>
-      <Skeleton height="4%" width="20%" />
-      <ParagraphDivider />
+    <Paragraph lines={10} trail="70%" />
+    <ParagraphDivider />
 
-      <Paragraph lines={10} trail="70%" />
-      <ParagraphDivider />
+    <Paragraph lines={13} trail="30%" />
+    <ParagraphDivider />
 
-      <Paragraph lines={13} trail="30%" />
-      <ParagraphDivider />
+    <Skeleton height="4%" width="20%" />
+    <ParagraphDivider />
 
-      <Skeleton height="4%" width="20%" />
-      <ParagraphDivider />
-
-      <Paragraph lines={8} trail="50%" />
-    </Paper>
-  );
-};
+    <Paragraph lines={8} trail="50%" />
+  </Paper>
+);
 
 export default PageSkeleton;

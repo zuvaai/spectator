@@ -1,8 +1,6 @@
 import React from "react";
 
-import makeStyles from '@mui/styles/makeStyles';
-import { Box, ListItem, Paper } from "@mui/material";
-import Skeleton from '@mui/material/Skeleton';
+import { Box, ListItem, Paper, Skeleton } from "@mui/material";
 
 import Viewbox, { EmptyViewbox } from "./Viewbox";
 import PageSkeleton from "./loading/PageSkeleton";
@@ -24,45 +22,6 @@ import {
 } from "./types";
 
 export const WHOLE_PAGE_ZOOM = "whole-page-zoom";
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "block",
-    marginLeft: theme.spacing(1.5),
-  },
-  skeletonAnnotations: {
-    position: "relative",
-    flex: `0 0 ${ANNOTATION_LABELS_WIDTH}px`,
-    marginLeft: `${ANNOTATION_LABELS_MARGIN_LEFT}px`,
-  },
-  skeletonAnnotationDot: {
-    background: theme.palette.info.main,
-    flex: "0 0 auto",
-    width: "8px",
-    height: "8px",
-    borderRadius: "100%",
-  },
-  skeletonAnnotationLabel: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    background: theme.palette.background.paper,
-    padding: theme.spacing(0, 0.5, 0, 1),
-    height: "20px",
-    width: "180px",
-  },
-  skeletonAnnotationText: {
-    cursor: "pointer",
-    flex: "1 1 auto",
-    fontSize: "12px",
-    margin: theme.spacing(0.125, 0.5, 0, 1),
-  },
-  wrapper: {
-    display: "flex",
-    flexFlow: "row nowrap",
-    margin: "0 auto",
-  },
-}));
 
 const getPageDimensions = (
   containerWidth: number,
@@ -102,7 +61,6 @@ type EmptyPageProps = {
 
 export const EmptyPage = (props: EmptyPageProps): JSX.Element => {
   const { containerWidth, containerHeight, originalPageWidth, originalPageHeight, zoom } = props;
-  const classes = useStyles();
 
   const [pageWrapperHeight, setPageWrapperHeight] = React.useState(0);
   const [pageWrapperWidth, setPageWrapperWidth] = React.useState(0);
@@ -125,26 +83,68 @@ export const EmptyPage = (props: EmptyPageProps): JSX.Element => {
 
   return (
     <ListItem
-      className={classes.root}
       disableGutters
       style={{
         width: `calc(100% - 15px)`,
       }}
+      sx={{ display: "block", marginLeft: 1.5 }}
     >
       <Box
-        className={classes.wrapper}
-        style={{
-          width: pageWrapperWidth + "px",
-          height: pageWrapperHeight + "px",
+        sx={{
+          display: "flex",
+          flexFlow: "row nowrap",
+          height: `${pageWrapperHeight}px`,
+          margin: "0 auto",
+          width: `${pageWrapperWidth}px`,
         }}
       >
         <PageSkeleton />
-        <Box className={classes.skeletonAnnotations}>
+        <Box
+          sx={{
+            position: "relative",
+            flex: `0 0 ${ANNOTATION_LABELS_WIDTH}px`,
+            marginLeft: `${ANNOTATION_LABELS_MARGIN_LEFT}px`,
+          }}
+        >
           <Box position="absolute">
             {[...Array(5)].map((_, idx) => (
-              <Paper square key={idx} className={classes.skeletonAnnotationLabel}>
-                <span className={classes.skeletonAnnotationDot} />
-                <Skeleton className={classes.skeletonAnnotationText} height="60%" width="100%" />
+              <Paper
+                key={idx}
+                square
+                sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  background: "background.paper",
+                  py: 0,
+                  pr: 0.5,
+                  pl: 1,
+                  height: "20px",
+                  width: "180px",
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{
+                    background: "info.main",
+                    flex: "0 0 auto",
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "100%",
+                  }}
+                />
+                <Skeleton
+                  height="60%"
+                  width="100%"
+                  sx={{
+                    cursor: "pointer",
+                    flex: "1 1 auto",
+                    fontSize: "12px",
+                    mt: 0.125,
+                    mx: 0.5,
+                    mb: 1,
+                  }}
+                />
               </Paper>
             ))}
           </Box>
@@ -201,8 +201,6 @@ const Page = (props: PageProps): JSX.Element => {
     zoom,
   } = props;
 
-  const classes = useStyles();
-
   const [pageWrapperHeight, setPageWrapperHeight] = React.useState(0);
   const [pageWrapperWidth, setPageWrapperWidth] = React.useState(0);
 
@@ -236,18 +234,20 @@ const Page = (props: PageProps): JSX.Element => {
 
   return (
     <ListItem
-      className={classes.root}
       ref={pageRef}
       disableGutters
       style={{
         width: `calc(100% - 15px)`,
       }}
+      sx={{ display: "block", marginLeft: 1.5 }}
     >
       <Box
-        className={classes.wrapper}
-        style={{
-          width: pageWrapperWidth + "px",
-          height: pageWrapperHeight + "px",
+        sx={{
+          display: "flex",
+          flexFlow: "row nowrap",
+          height: `${pageWrapperHeight}px`,
+          margin: "0 auto",
+          width: `${pageWrapperWidth}px`,
         }}
       >
         {load ? (
