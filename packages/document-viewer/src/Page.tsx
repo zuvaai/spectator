@@ -1,8 +1,8 @@
 import React from "react";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Box, ListItem, Paper } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, ListItem, Paper } from "@mui/material";
+import Skeleton from '@mui/material/Skeleton';
 
 import Viewbox, { EmptyViewbox } from "./Viewbox";
 import PageSkeleton from "./loading/PageSkeleton";

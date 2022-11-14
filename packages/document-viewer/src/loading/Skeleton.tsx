@@ -1,5 +1,5 @@
-import { withStyles } from "@material-ui/core";
-import MuiSkeleton from "@material-ui/lab/Skeleton";
+import withStyles from '@mui/styles/withStyles';
+import MuiSkeleton from '@mui/material/Skeleton';
 
 export const TRANSITION_DELAY = "500ms";
 

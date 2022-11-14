@@ -1,8 +1,8 @@
 import React from "react";
 
-import { IconButton, Paper } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { IconButton, Paper } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import makeStyles from '@mui/styles/makeStyles';
 
 import { topicToColor } from "./annotationColors";
 
@@ -54,7 +54,7 @@ const AnnotationLabel = (
         {topic}
       </span>
       {onDelete && (
-        <IconButton className={classes.action} onClick={onDelete}>
+        <IconButton className={classes.action} onClick={onDelete} size="large">
           <Close fontSize="small" />
         </IconButton>
       )}

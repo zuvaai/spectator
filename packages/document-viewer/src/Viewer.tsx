@@ -1,13 +1,15 @@
 import React from "react";
 
-import {
-  AppBar,
-  Box,
-  StylesProvider,
-  createGenerateClassName,
-  makeStyles,
-} from "@material-ui/core";
+import { AppBar, Box } from "@mui/material";
+import { Theme } from "@mui/material/styles";
+import StylesProvider from "@mui/styles/StylesProvider";
+import createGenerateClassName from "@mui/styles/createGenerateClassName";
+import makeStyles from "@mui/styles/makeStyles";
 import { GenerateId } from "jss";
+
+declare module "@mui/styles/defaultTheme" {
+  interface DefaultTheme extends Theme {}
+}
 
 import NavBar from "./NavBar";
 import Pages, { PagesHandle } from "./Pages";
@@ -54,14 +56,6 @@ const useStyles = makeStyles({
     margin: 0,
   },
 });
-
-// TODO: See https://github.com/mui-org/material-ui/pull/22925
-// This is a work around should be fixed in mui v5
-declare module "@material-ui/core/Box" {
-  interface BoxProps {
-    ref?: React.MutableRefObject<HTMLElement> | React.Ref<unknown>;
-  }
-}
 
 export type ViewerRef = React.RefObject<PagesHandle>;
 

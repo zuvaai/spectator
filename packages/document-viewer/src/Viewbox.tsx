@@ -2,8 +2,8 @@ import React from "react";
 import Flatbush from "flatbush";
 import clsx from "clsx";
 import { isFunction } from "lodash";
-import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Paper } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import { topicToColor } from "./ui/annotationColors";
 
 import {

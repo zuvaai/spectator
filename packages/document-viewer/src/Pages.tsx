@@ -1,7 +1,7 @@
 import React from "react";
 import { isEqual } from "lodash";
-import { Box, List } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, List } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import Picker from "./Picker";
 import Page, { EmptyPage } from "./Page";
 

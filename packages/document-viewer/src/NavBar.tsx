@@ -2,9 +2,9 @@ import React from "react";
 import { DebouncedFunc, debounce } from "lodash";
 import clsx from "clsx";
 
-import { Grid, IconButton, Paper, TextField, Toolbar, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { ChevronLeft, ChevronRight, Close, ExpandLess, ExpandMore } from "@material-ui/icons";
+import { Grid, IconButton, Paper, TextField, Toolbar, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { ChevronLeft, ChevronRight, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -71,13 +71,13 @@ const useStyles = makeStyles(theme => ({
   },
   gridPages: {
     order: 2,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('md')]: {
       order: 3,
     },
   },
   gridNavigation: {
     order: 3,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('md')]: {
       order: 2,
     },
   },
@@ -173,7 +173,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
         xs={12}
         alignItems="center"
         wrap="nowrap"
-        justify="center"
+        justifyContent="center"
       >
         <Typography className={classes.pages} variant="body1" display="inline" noWrap>
           Pages
@@ -218,7 +218,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
           className={classes.icon}
           disabled={navigationIndex <= 1}
           onClick={handleNavigationItemUp}
-        >
+          size="large">
           <ExpandLess />
         </IconButton>
         <IconButton
@@ -226,7 +226,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
           className={classes.icon}
           disabled={navigationIndex >= navigationTotal}
           onClick={handleNavigationItemDown}
-        >
+          size="large">
           <ExpandMore />
         </IconButton>
       </Grid>
@@ -237,7 +237,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
         item
         md={4}
         xs={6}
-        justify="flex-end"
+        justifyContent="flex-end"
         alignItems="center"
         wrap="nowrap"
       >
@@ -252,7 +252,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
           className={classes.icon}
           disabled={!onPreviousDocument}
           onClick={onPreviousDocument}
-        >
+          size="large">
           <ChevronLeft />
         </IconButton>
 
@@ -261,11 +261,15 @@ const NavBar = (props: NavBarProps): JSX.Element => {
           className={classes.icon}
           disabled={!onNextDocument}
           onClick={onNextDocument}
-        >
+          size="large">
           <ChevronRight />
         </IconButton>
 
-        <IconButton aria-label={"Close Document"} color="inherit" onClick={onClose}>
+        <IconButton
+          aria-label={"Close Document"}
+          color="inherit"
+          onClick={onClose}
+          size="large">
           <Close />
         </IconButton>
       </Grid>
