@@ -13,7 +13,7 @@
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom/profiling",
     "scheduler/tracing": "../node_modules/scheduler/tracing-profiling",
-    "@material-ui": "../node_modules/@material-ui"
+    "@mui": "../node_modules/@mui"
   },
   "devDependencies": {
     "@parcel/transformer-image": "2.0.0-nightly.2277",
