@@ -74,9 +74,6 @@ export const AnnotationsGroup = (props: AnnotationsGroupProps): JSX.Element => {
 
   return (
     <Box
-      // Gotta love that non-sense
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore see https://github.com/mui-org/material-ui/issues/17010
       ref={groupRef}
       sx={{
         position: "absolute",
