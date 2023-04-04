@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@mui/material";
 
 import {
   AnnotationsGroup,
@@ -14,14 +13,6 @@ import { IndexedAnnotation } from "./types";
 export const ANNOTATION_LABELS_WIDTH = 200;
 export const ANNOTATION_LABELS_MARGIN_LEFT = 6;
 const ANNOTATION_LABEL_HEIGHT = 20;
-
-const useStyles = makeStyles({
-  root: {
-    position: "relative",
-    flex: `0 0 ${ANNOTATION_LABELS_WIDTH}px`,
-    marginLeft: `${ANNOTATION_LABELS_MARGIN_LEFT}px`,
-  },
-});
 
 type AnnotationLabelsProps = {
   annotations: IndexedAnnotation[];
@@ -45,8 +36,6 @@ export const AnnotationLabels = (props: AnnotationLabelsProps): JSX.Element => {
     pageNumber,
     pageWrapperHeight,
   } = props;
-
-  const classes = useStyles();
 
   const annotationGroups = React.useMemo(() => {
     if (!pageWrapperHeight) return [];
@@ -103,7 +92,13 @@ export const AnnotationLabels = (props: AnnotationLabelsProps): JSX.Element => {
   }, [annotations, originalPageHeight, pageNumber, pageWrapperHeight]);
 
   return (
-    <Box className={classes.root}>
+    <Box
+      sx={{
+        position: "relative",
+        flex: `0 0 ${ANNOTATION_LABELS_WIDTH}px`,
+        marginLeft: `${ANNOTATION_LABELS_MARGIN_LEFT}px`,
+      }}
+    >
       {annotationGroups.map((group: AnnotationsGroup, groupKey: number) => (
         <AnnotationsGroup
           key={groupKey}

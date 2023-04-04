@@ -1,90 +1,8 @@
 import React from "react";
 import { DebouncedFunc, debounce } from "lodash";
-import clsx from "clsx";
 
-import { Grid, IconButton, Paper, TextField, Toolbar, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { ChevronLeft, ChevronRight, Close, ExpandLess, ExpandMore } from "@material-ui/icons";
-
-const useStyles = makeStyles(theme => ({
-  grow: {
-    flexGrow: 1,
-  },
-  icon: {
-    color: "white",
-    padding: theme.spacing(1),
-    "&.Mui-disabled": {
-      color: theme.palette.grey[500],
-    },
-  },
-  input: {
-    fontSize: "14px",
-    fontWeight: 400,
-    padding: theme.spacing(1.25),
-  },
-  number: {
-    color: "black",
-    backgroundColor: "white",
-    width: 36,
-    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-      "-webkit-appearance": "none",
-      margin: 0,
-    },
-  },
-  numberInput: {
-    "-moz-appearance": "textfield",
-    textAlign: "center",
-  },
-  numberRoot: {
-    borderRadius: 0,
-  },
-  pages: {
-    color: "white",
-    fontSize: "14px",
-    fontWeight: 400,
-    margin: theme.spacing(0, 1),
-  },
-  separator: {
-    color: "white",
-    fontSize: "14px",
-    fontWeight: 400,
-    marginLeft: theme.spacing(1),
-  },
-  pageCount: {
-    color: "white",
-    fontSize: "14px",
-    fontWeight: 400,
-    marginRight: theme.spacing(1),
-    marginLeft: theme.spacing(0.5),
-  },
-  title: {
-    fontSize: "16px",
-    fontWeight: 600,
-  },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexFlow: "wrap",
-  },
-  gridTitle: {
-    order: 1,
-  },
-  gridPages: {
-    order: 2,
-    [theme.breakpoints.down("sm")]: {
-      order: 3,
-    },
-  },
-  gridNavigation: {
-    order: 3,
-    [theme.breakpoints.down("sm")]: {
-      order: 2,
-    },
-  },
-  sourceLink: {
-    marginRight: theme.spacing(1),
-  },
-}));
+import { Grid, IconButton, Paper, TextField, Toolbar, Typography } from "@mui/material";
+import { ChevronLeft, ChevronRight, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 type NavBarProps = {
   documentName: string;
@@ -111,7 +29,6 @@ const NavBar = (props: NavBarProps): JSX.Element => {
     onPreviousDocument,
   } = props;
 
-  const classes = useStyles();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [inputValue, setInputValue] = React.useState<string>(navigationIndex.toString());
@@ -158,29 +75,33 @@ const NavBar = (props: NavBarProps): JSX.Element => {
   }, [navigationIndex]);
 
   return (
-    <Toolbar className={classes.toolbar}>
-      <Grid className={classes.gridTitle} item md={4} xs={6}>
-        <Typography className={classes.title} variant="h3" color="inherit" noWrap>
+    <Toolbar sx={{ display: "flex", justifyContent: "space-between", flexFlow: "wrap" }}>
+      <Grid item md={4} xs={6} sx={{ order: 1 }}>
+        <Typography variant="h3" color="inherit" noWrap sx={{ fontSize: "16px", fontWeight: 600 }}>
           {documentName}
         </Typography>
       </Grid>
 
       <Grid
-        className={classes.gridPages}
         container
         item
         md={4}
         xs={12}
         alignItems="center"
         wrap="nowrap"
-        justify="center"
+        justifyContent="center"
+        sx={{ order: { md: 3, lg: 2 } }}
       >
-        <Typography className={classes.pages} variant="body1" display="inline" noWrap>
+        <Typography
+          variant="body1"
+          display="inline"
+          noWrap
+          sx={{ color: "white", fontSize: "14px", fontWeight: 400, mx: 1, my: 0 }}
+        >
           Pages
         </Typography>
 
         <TextField
-          className={classes.number}
           inputRef={inputRef}
           type="number"
           onChange={handleNavigationItemChange}
@@ -191,81 +112,138 @@ const NavBar = (props: NavBarProps): JSX.Element => {
             min: 1,
             max: navigationTotal,
           }}
-          InputProps={{
-            classes: {
-              root: classes.numberRoot,
-              input: clsx(classes.input, classes.numberInput),
+          variant="outlined"
+          sx={{
+            color: "black",
+            backgroundColor: "white",
+            width: 36,
+            "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+              "-webkit-appearance": "none",
+              margin: 0,
+            },
+            "& .MuiInput-root": {
+              borderRadius: 0,
+            },
+            "& .MuiInput-input": {
+              fontSize: "14px",
+              fontWeight: 400,
+              padding: 1.25,
+              MozAppearance: "textfield",
+              textAlign: "center",
             },
           }}
-          variant="outlined"
         />
 
-        <Typography className={classes.separator} variant="body1" display="inline" noWrap>
-          {"/"}
-        </Typography>
         <Typography
-          id="page-count"
-          className={classes.pageCount}
           variant="body1"
           display="inline"
           noWrap
+          sx={{
+            color: "white",
+            fontSize: "14px",
+            fontWeight: 400,
+            marginLeft: 1,
+          }}
+        >
+          /
+        </Typography>
+        <Typography
+          id="page-count"
+          variant="body1"
+          display="inline"
+          noWrap
+          sx={{
+            color: "white",
+            fontSize: "14px",
+            fontWeight: 400,
+            marginRight: 1,
+            marginLeft: 0.5,
+          }}
         >
           {navigationTotal}
         </Typography>
 
         <IconButton
           aria-label={"Previous Page"}
-          className={classes.icon}
           disabled={navigationIndex <= 1}
           onClick={handleNavigationItemUp}
+          size="large"
+          sx={{
+            color: "white",
+            padding: 1,
+            "&.Mui-disabled": {
+              color: "grey.500",
+            },
+          }}
         >
           <ExpandLess />
         </IconButton>
         <IconButton
           aria-label={"Next Page"}
-          className={classes.icon}
           disabled={navigationIndex >= navigationTotal}
           onClick={handleNavigationItemDown}
+          size="large"
+          sx={{
+            color: "white",
+            padding: 1,
+            "&.Mui-disabled": {
+              color: "grey.500",
+            },
+          }}
         >
           <ExpandMore />
         </IconButton>
       </Grid>
 
       <Grid
-        className={classes.gridNavigation}
         container
         item
         md={4}
         xs={6}
-        justify="flex-end"
+        justifyContent="flex-end"
         alignItems="center"
         wrap="nowrap"
+        sx={{ order: { md: 2, lg: 3 } }}
       >
         {SourceLink && (
-          <Paper className={classes.sourceLink} elevation={0}>
+          <Paper elevation={0} sx={{ mr: 1 }}>
             {SourceLink}
           </Paper>
         )}
 
         <IconButton
           aria-label={"Previous Document"}
-          className={classes.icon}
           disabled={!onPreviousDocument}
           onClick={onPreviousDocument}
+          size="large"
+          sx={{
+            color: "white",
+            padding: 1,
+            "&.Mui-disabled": {
+              color: "grey.500",
+            },
+          }}
         >
           <ChevronLeft />
         </IconButton>
 
         <IconButton
           aria-label={"Next Document"}
-          className={classes.icon}
           disabled={!onNextDocument}
           onClick={onNextDocument}
+          size="large"
+          sx={{
+            color: "white",
+            padding: 1,
+            "&.Mui-disabled": {
+              color: "grey.500",
+            },
+          }}
         >
           <ChevronRight />
         </IconButton>
 
-        <IconButton aria-label={"Close Document"} color="inherit" onClick={onClose}>
+        <IconButton aria-label={"Close Document"} color="inherit" onClick={onClose} size="large">
           <Close />
         </IconButton>
       </Grid>

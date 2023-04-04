@@ -1,7 +1,6 @@
 import React from "react";
 import { isEqual } from "lodash";
-import { Box, List } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, List } from "@mui/material";
 import Picker from "./Picker";
 import Page, { EmptyPage } from "./Page";
 
@@ -19,19 +18,6 @@ import {
   Selection,
   ScrollPosition,
 } from "./types";
-
-type StyleProps = {
-  width: number;
-};
-
-const useStyles = makeStyles({
-  root: ({ width }: StyleProps) => ({
-    overflow: "auto",
-    maxWidth: width,
-    width: "100%",
-    height: "100%",
-  }),
-});
 
 const annotationsPerPage = (annotations: IndexedAnnotation[]): Map<number, IndexedAnnotation[]> => {
   const pages = new Map();
@@ -191,8 +177,6 @@ const Pages: React.ForwardRefRenderFunction<PagesHandle, PagesProps> = (
     pagesHeight,
     zoom,
   } = props;
-
-  const classes = useStyles({ width: pagesWidth });
 
   const [mouseStart, setMouseStart] = React.useState<MousePosition>([0, 0]);
   const [mouseEnd, setMouseEnd] = React.useState<MousePosition | null>(null);
@@ -428,7 +412,11 @@ const Pages: React.ForwardRefRenderFunction<PagesHandle, PagesProps> = (
   );
 
   return (
-    <Box ref={pagesContainerEl} className={classes.root} onScroll={handleScroll}>
+    <Box
+      ref={pagesContainerEl}
+      onScroll={handleScroll}
+      sx={{ overflow: "auto", maxWidth: "100%", width: "100%", height: "100%" }}
+    >
       <List ref={pagesEl} className={"Pages"} onMouseDown={handleMouseDown} onClick={handleClick}>
         {loading ? (
           <EmptyPage

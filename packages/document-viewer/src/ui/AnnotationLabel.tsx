@@ -1,40 +1,9 @@
 import React from "react";
 
-import { IconButton, Paper } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, IconButton, Paper } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 import { topicToColor } from "./annotationColors";
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    background: theme.palette.background.paper,
-    padding: theme.spacing(0, 0.5, 0, 1),
-    width: "180px",
-  },
-  dot: {
-    flex: "0 0 auto",
-    width: "8px",
-    height: "8px",
-    borderRadius: "100%",
-  },
-  text: {
-    cursor: "pointer",
-    flex: "1 1 auto",
-    fontSize: "12px",
-    padding: theme.spacing(0.125, 0.5, 0, 1),
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-  action: {
-    flex: "0 0 auto",
-    padding: 0,
-  },
-}));
 
 type AnnotationLabelProps = {
   onDelete?: (event: React.MouseEvent) => void;
@@ -45,16 +14,51 @@ const AnnotationLabel = (
   props: AnnotationLabelProps & React.HTMLAttributes<HTMLDivElement>
 ): JSX.Element => {
   const { onClick, onDelete, topic, ...rest } = props;
-  const classes = useStyles();
 
   return (
-    <Paper square className={classes.root} {...rest}>
-      <span className={classes.dot} style={{ background: topicToColor(topic) }} />
-      <span className={classes.text} onClick={onClick}>
+    <Paper
+      square
+      sx={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        background: "background.paper",
+        py: 0,
+        pr: 0.5,
+        pl: 1,
+        width: "180px",
+      }}
+      {...rest}
+    >
+      <span
+        style={{
+          background: topicToColor(topic),
+          borderRadius: "100%",
+          flex: "0 0 auto",
+          height: "8px",
+          width: "8px",
+        }}
+      />
+      <Box
+        component="span"
+        onClick={onClick}
+        sx={{
+          cursor: "pointer",
+          flex: "1 1 auto",
+          fontSize: "12px",
+          pt: 0.125,
+          pr: 0.5,
+          pb: 0,
+          pl: 1,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
         {topic}
-      </span>
+      </Box>
       {onDelete && (
-        <IconButton className={classes.action} onClick={onDelete}>
+        <IconButton onClick={onDelete} size="large" sx={{ flex: "0 0 auto", padding: 0 }}>
           <Close fontSize="small" />
         </IconButton>
       )}

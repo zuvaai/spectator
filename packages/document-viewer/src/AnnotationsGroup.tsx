@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Box, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, Button } from "@mui/material";
 
 import AnnotationLabel from "./ui/AnnotationLabel";
 
@@ -10,18 +9,6 @@ import { IndexedAnnotation } from "./types";
 export const MAX_ANNOTATION_LABELS_TO_SHOW = 5;
 export const MORE_BUTTON_HEIGHT = 20;
 const ANNOTATION_LABEL_LEFT_OFFSET = -18;
-
-const useStyles = makeStyles({
-  root: {
-    position: "absolute",
-  },
-  more: {
-    width: "100%",
-    height: `${MORE_BUTTON_HEIGHT}px`,
-    borderRadius: 0,
-    marginTop: "-3px",
-  },
-});
 
 export type AnnotationsGroup = {
   top: number;
@@ -45,8 +32,6 @@ export const AnnotationsGroup = (props: AnnotationsGroupProps): JSX.Element => {
     onAnnotationDelete,
     onAnnotationFocus,
   } = props;
-
-  const classes = useStyles();
 
   const groupRef = React.useRef<HTMLDivElement>(null);
 
@@ -89,12 +74,9 @@ export const AnnotationsGroup = (props: AnnotationsGroupProps): JSX.Element => {
 
   return (
     <Box
-      // Gotta love that non-sense
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore see https://github.com/mui-org/material-ui/issues/17010
       ref={groupRef}
-      className={classes.root}
-      style={{
+      sx={{
+        position: "absolute",
         top: annotationsGroup.top,
       }}
     >
@@ -129,8 +111,13 @@ export const AnnotationsGroup = (props: AnnotationsGroupProps): JSX.Element => {
         <Button
           variant="contained"
           disableElevation
-          className={classes.more}
           onClick={handleMoreButtonClick}
+          sx={{
+            width: "100%",
+            height: `${MORE_BUTTON_HEIGHT}px`,
+            borderRadius: 0,
+            marginTop: "-3px",
+          }}
         >
           More
         </Button>

@@ -1,9 +1,7 @@
 import React from "react";
 import Flatbush from "flatbush";
-import clsx from "clsx";
 import { isFunction } from "lodash";
-import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Paper } from "@mui/material";
 import { topicToColor } from "./ui/annotationColors";
 
 import {
@@ -25,43 +23,6 @@ type Rectangle = BoundingBox & {
   annotationTopic: string;
   annotationIndex: number;
 };
-
-const useStyles = makeStyles({
-  root: {
-    position: "relative",
-    flex: "1 1 auto",
-    cursor: "text",
-  },
-  image: {
-    height: "100%",
-    width: "100%",
-    userSelect: "none",
-  },
-  svg: {
-    position: "absolute",
-    top: "0px",
-    left: "0px",
-    height: "100%",
-    width: "100%",
-  },
-  selection: {
-    mixBlendMode: "multiply",
-    fillOpacity: 0.6,
-  },
-  searchResult: {
-    fill: "#E9CB77",
-    fillOpacity: 0.5,
-    mixBlendMode: "multiply",
-  },
-  rect: {
-    cursor: "pointer",
-    mixBlendMode: "multiply",
-    fillOpacity: 0.3,
-  },
-  rectFocused: {
-    fillOpacity: 0.6,
-  },
-});
 
 // Returns closest
 // var arr = [{characterStart: 1, characterEnd: 5},
@@ -323,8 +284,6 @@ const Viewbox = (props: ViewboxrProps): JSX.Element => {
     tokensURL,
   } = props;
 
-  const classes = useStyles();
-
   const pageImageWrapperRef = React.useRef<HTMLDivElement>(null);
 
   const [imageSrc, setImageSrc] = React.useState<string | null>(null);
@@ -370,7 +329,9 @@ const Viewbox = (props: ViewboxrProps): JSX.Element => {
           .then(res => setTokens(res))
           .catch(err => console.error("Error fetching the tokens", err));
       } catch (err) {
-        if (err.name !== "AbortError") {
+        if (err instanceof Error && err.name == "AbortError") {
+          // pass
+        } else {
           console.error("Error fetching the tokens", err);
         }
       }
@@ -527,20 +488,26 @@ const Viewbox = (props: ViewboxrProps): JSX.Element => {
   ]);
 
   return (
-    <Paper className={classes.root} ref={pageImageWrapperRef}>
-      {imageSrc && <img className={classes.image} src={imageSrc} alt={"Page " + pageNumber} />}
+    <Paper
+      ref={pageImageWrapperRef}
+      sx={{ position: "relative", flex: "1 1 auto", cursor: "text" }}
+    >
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt={"Page " + pageNumber}
+          style={{ height: "100%", width: "100%", userSelect: "none" }}
+        />
+      )}
 
       {tokens && (
-        <svg className={classes.svg} viewBox={`0 0 ${originalPageWidth} ${originalPageHeight}`}>
+        <svg
+          viewBox={`0 0 ${originalPageWidth} ${originalPageHeight}`}
+          style={{ position: "absolute", top: "0px", left: "0px", height: "100%", width: "100%" }}
+        >
           {annotationRectangles.map((rectangle: Rectangle, index: number) => (
             <rect
               key={`annotation-${index}`}
-              className={clsx(
-                classes.rect,
-                focusingAnnotation &&
-                  rectangle.annotationIndex === focusedAnnotationIndex &&
-                  classes.rectFocused
-              )}
               x={rectangle.left - RECTANGLE_PADDING}
               y={rectangle.top - RECTANGLE_PADDING}
               onClick={(event: React.MouseEvent): void => {
@@ -550,29 +517,37 @@ const Viewbox = (props: ViewboxrProps): JSX.Element => {
               }}
               width={rectangle.right - rectangle.left + 2 * RECTANGLE_PADDING}
               height={rectangle.bottom - rectangle.top + 2 * RECTANGLE_PADDING}
-              style={{ fill: topicToColor(rectangle.annotationTopic) }}
+              style={{
+                cursor: "pointer",
+                fill: topicToColor(rectangle.annotationTopic),
+                fillOpacity:
+                  focusingAnnotation && rectangle.annotationIndex === focusedAnnotationIndex
+                    ? 0.3
+                    : 0.6,
+                mixBlendMode: "multiply",
+              }}
             />
           ))}
 
           {searchResultRectangles.map((rectangle: BoundingBox, index: number) => (
             <rect
               key={`search-result-${index}`}
-              className={classes.searchResult}
               x={rectangle.left - RECTANGLE_PADDING}
               y={rectangle.top - RECTANGLE_PADDING}
               width={rectangle.right - rectangle.left + 2 * RECTANGLE_PADDING}
               height={rectangle.bottom - rectangle.top + 2 * RECTANGLE_PADDING}
+              style={{ fill: "#E9CB77", fillOpacity: 0.5, mixBlendMode: "multiply" }}
             />
           ))}
 
           {selectionRectangles.map((rectangle: BoundingBox, index: number) => (
             <rect
               key={`selection-${index}`}
-              className={classes.selection}
               x={rectangle.left - RECTANGLE_PADDING}
               y={rectangle.top - RECTANGLE_PADDING}
               width={rectangle.right - rectangle.left + 2 * RECTANGLE_PADDING}
               height={rectangle.bottom - rectangle.top + 2 * RECTANGLE_PADDING}
+              style={{ mixBlendMode: "multiply", fillOpacity: 0.6 }}
             />
           ))}
         </svg>
@@ -581,9 +556,8 @@ const Viewbox = (props: ViewboxrProps): JSX.Element => {
   );
 };
 
-export const EmptyViewbox = (): JSX.Element => {
-  const classes = useStyles();
-  return <Paper className={classes.root}></Paper>;
-};
+export const EmptyViewbox = (): JSX.Element => (
+  <Paper sx={{ position: "relative", flex: "1 1 auto", cursor: "text" }}></Paper>
+);
 
 export default Viewbox;
