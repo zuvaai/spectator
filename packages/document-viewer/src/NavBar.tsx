@@ -118,7 +118,7 @@ const NavBar = (props: NavBarProps): JSX.Element => {
             backgroundColor: "white",
             width: 36,
             "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-              "-webkit-appearance": "none",
+              WebkitAppearance: "none",
               margin: 0,
             },
             "& .MuiInput-root": {
